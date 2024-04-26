@@ -69,7 +69,7 @@ class ProductCRUDApp:
         btn_frame = ttk.Frame(self.root)
         btn_frame.pack(pady=10)
 
-        buttons = [("Agregar", lambda: print("Agregar")), 
+        buttons = [("Agregar", self.add_product), 
                    ("Eliminar", lambda:print("Eliminar")),
                    ("Actualizar", lambda: print("Actualizar")), 
                    ("Buscar", lambda:print("Buscar")),
@@ -84,8 +84,20 @@ class ProductCRUDApp:
         for row in self.db.fetch_all_products():
             self.tree.insert("", "end", values=row)
 
+    def add_product(self):
+        values = [entry.get() for entry in self.entries.values()]
+        if all(values):
+            self.db.execute_query("INSERT INTO productos (nombre, precio, stock) VALUES (?, ?, ?)", *values)
+            messagebox.showinfo("Éxito", "Producto agregado con éxito")
+            self.load_products()
+            self.clear_input_fields()
+        else:
+            messagebox.showerror("Error", "Por favor, complete todos los campos")
 
-
+    def clear_input_fields(self):
+        for entry in self.entries.values():
+            entry.delete(0, tk.END)
+            
     def clear_table(self):
         for item in self.tree.get_children():
             self.tree.delete(item)
