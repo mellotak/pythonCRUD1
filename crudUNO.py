@@ -12,6 +12,7 @@ class ProductCRUDApp:
     def create_widgets(self):
         self.create_treeview()
         self.create_input_fields()
+        self.create_buttons()
 
     def create_treeview(self):
         self.tree = ttk.Treeview(self.root, columns=("ID", "Nombre", "Precio", "Stock"), show="headings")
@@ -32,7 +33,19 @@ class ProductCRUDApp:
             entry.pack(pady=(0, 10), padx=10, fill="x")
             self.entries[label_text] = entry
 
+    def create_buttons(self):
+        btn_frame = ttk.Frame(self.root)
+        btn_frame.pack(pady=10)
 
+        buttons = [("Agregar", lambda: print("Agregar")), 
+                   ("Eliminar", lambda:print("Eliminar")),
+                   ("Actualizar", lambda: print("Actualizar")), 
+                   ("Buscar", lambda:print("Buscar")),
+                   ("Mostrar Todo", lambda:print("Mostrar Todo"))]
+
+        for text, command in buttons:
+            button = ttk.Button(btn_frame, text=text, command=command)
+            button.grid(row=0, column=buttons.index((text, command)), padx=5)
 
 if __name__ == "__main__":
     root = tk.Tk()
