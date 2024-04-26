@@ -71,7 +71,7 @@ class ProductCRUDApp:
 
         buttons = [("Agregar", self.add_product), 
                    ("Eliminar", self.remove_product),
-                   ("Actualizar", lambda: print("Actualizar")), 
+                   ("Actualizar", self.update_product), 
                    ("Buscar", lambda:print("Buscar")),
                    ("Mostrar Todo", lambda:print("Mostrar Todo"))]
 
@@ -101,6 +101,18 @@ class ProductCRUDApp:
             self.db.execute_query("DELETE FROM productos WHERE id=?", product_id)
             messagebox.showinfo("Éxito", "Producto eliminado con éxito")
             self.load_products()
+
+
+    def update_product(self):
+        selected_item = self.tree.selection()
+        if selected_item:
+            product_id = self.tree.item(selected_item, "values")[0]
+            values = [entry.get() for entry in self.entries.values()]
+            self.db.execute_query("UPDATE productos SET nombre=?, precio=?, stock=? WHERE id=?", *(values + [product_id]))
+            messagebox.showinfo("Éxito", "Producto actualizado con éxito")
+            self.load_products()
+            self.clear_input_fields()
+
 
 
     def clear_input_fields(self):
