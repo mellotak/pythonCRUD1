@@ -38,7 +38,7 @@ class ProductCRUDApp:
         self.root.title("Gestión de Productos")
         self.db = ProductDB("productos.db")
         self.create_widgets()
-       
+        self.load_products()
 
     
     def create_widgets(self):
@@ -79,7 +79,16 @@ class ProductCRUDApp:
             button = ttk.Button(btn_frame, text=text, command=command)
             button.grid(row=0, column=buttons.index((text, command)), padx=5)
     
+    def load_products(self):
+        self.clear_table()
+        for row in self.db.fetch_all_products():
+            self.tree.insert("", "end", values=row)
 
+
+
+    def clear_table(self):
+        for item in self.tree.get_children():
+            self.tree.delete(item)
 
 if __name__ == "__main__":
     root = tk.Tk()
