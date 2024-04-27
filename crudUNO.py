@@ -72,8 +72,8 @@ class ProductCRUDApp:
         buttons = [("Agregar", self.add_product), 
                    ("Eliminar", self.remove_product),
                    ("Actualizar", self.update_product), 
-                   ("Buscar", lambda:print("Buscar")),
-                   ("Mostrar Todo", lambda:print("Mostrar Todo"))]
+                   ("Buscar", self.search_product),
+                   ("Mostrar Todo", self.show_all_products)]
 
         for text, command in buttons:
             button = ttk.Button(btn_frame, text=text, command=command)
@@ -113,6 +113,17 @@ class ProductCRUDApp:
             self.load_products()
             self.clear_input_fields()
 
+    def search_product(self):
+        search_term = self.entries["Nombre del Producto:"].get()
+        if search_term:
+            self.clear_table()
+            for row in self.db.execute_query("SELECT * FROM productos WHERE nombre LIKE ?", '%' + search_term + '%'):
+                self.tree.insert("", "end", values=row)
+        else:
+            messagebox.showerror("Error", "Por favor, ingrese un término de búsqueda")
+
+    def show_all_products(self):
+        self.load_products()
 
 
     def clear_input_fields(self):
