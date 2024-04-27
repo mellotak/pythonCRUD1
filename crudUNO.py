@@ -53,6 +53,8 @@ class ProductCRUDApp:
         self.tree.heading("Precio", text="Precio")
         self.tree.heading("Stock", text="Stock")
         self.tree.pack(padx=10, pady=10)
+        self.tree.bind("<<TreeviewSelect>>", self.on_tree_select)
+
 
     def create_input_fields(self):
         fields = [("Nombre del Producto:", 10), ("Precio:", 10), ("Stock:", 10)]
@@ -125,6 +127,14 @@ class ProductCRUDApp:
     def show_all_products(self):
         self.load_products()
 
+    def on_tree_select(self, event):
+        selected_item = self.tree.selection()
+        if selected_item:
+            values = self.tree.item(selected_item, "values")
+            if values:
+                for entry, value in zip(self.entries.values(), values[1:]):
+                    entry.delete(0, tk.END)
+                    entry.insert(0, value)
 
     def clear_input_fields(self):
         for entry in self.entries.values():
